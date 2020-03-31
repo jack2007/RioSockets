@@ -197,30 +197,6 @@ extern "C" {
 		return 0;
 	}
 
-	inline static size_t riosockets_string_copy(char* destination, const char* source, size_t length) {
-		char* d = destination;
-		const char* s = source;
-		size_t n = length;
-
-		if (n != 0 && --n != 0) {
-			do {
-				if ((*d++ = *s++) == 0)
-					break;
-			}
-
-			while (--n != 0);
-		}
-
-		if (n == 0) {
-			if (length != 0)
-				*d = '\0';
-
-			while (*s++);
-		}
-
-		return (s - source - 1);
-	}
-
 	inline static void riosockets_address_extract(RioAddress* address, const struct sockaddr_storage* source) {
 		if (source->ss_family == AF_INET) {
 			struct sockaddr_in* socketAddress = (struct sockaddr_in*)source;
@@ -678,11 +654,12 @@ extern "C" {
 	}
 
 	RioStatus riosockets_address_get_ip(const RioAddress* address, char* ip, int ipLength) {
-		if (inet_ntop(AF_INET6, &address->ipv6, ip, ipLength) == NULL)
+		if (address->ipv4.ffff == 0xFFFF && riosockets_array_is_zeroed(address->ipv4.zeros, sizeof(address->ipv4.zeros)) == 0) {
+			if (inet_ntop(AF_INET, &address->ipv4.ip, ip, ipLength) == NULL)
+				return RIOSOCKETS_STATUS_ERROR;
+		} else if (inet_ntop(AF_INET6, &address->ipv6, ip, ipLength) == NULL) {
 			return RIOSOCKETS_STATUS_ERROR;
-
-		if (riosockets_array_is_zeroed(address->ipv4.zeros, sizeof(address->ipv4.zeros)) == 0 && address->ipv4.ffff == 0xFFFF)
-			riosockets_string_copy(ip, ip + 7, ipLength);
+		}
 
 		return RIOSOCKETS_STATUS_OK;
 	}
