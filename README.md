@@ -6,7 +6,7 @@
 
 This is a high-performance, zero-copy, memory-efficient abstraction of UDP sockets over [Registered I/O](https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-r2-and-2012/hh997032(v%3Dws.11)) with dual-stack IPv4/IPv6 support. This implementation is based on single-threaded completions polling and utilizes large contiguous page-aligned ring buffers for payloads. It's designed for low-latency and high throughput with large numbers of small messages for applications such as multiplayer games.
 
-This implementation [achieves](https://i.imgur.com/GOfYaSg.png) the NIC throughput limit transmitting more than a million packets per second over the network.
+This implementation [achieves](https://i.imgur.com/GOfYaSg.png) the NIC throughput limit transmitting more than [a million packets per second](https://i.imgur.com/x3DxSHB.png) over the network.
 
 Building
 --------
