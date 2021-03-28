@@ -20,7 +20,7 @@ Before starting to work, the library should be initialized using `riosockets_ini
 
 After the work is done, deinitialize the library using `riosockets_deinitialize();` function.
 
-##### Start a new server:
+##### Start a new server
 ```c
 void callback(RioSocket server, const RioAddress* address, const uint8_t* data, int dataLength, RioType type) {
     if (type == RIOSOCKETS_TYPE_RECEIVE) {
@@ -62,7 +62,7 @@ if (error != RIOSOCKETS_ERROR_NONE) {
     riosockets_destroy(&server);
 }
 ```
-##### Start a new client:
+##### Start a new client
 ```c
 void callback(RioSocket client, const RioAddress* address, const uint8_t* data, int dataLength, RioType type) {
     if (type == RIOSOCKETS_TYPE_RECEIVE) {
