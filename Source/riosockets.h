@@ -560,7 +560,12 @@ extern "C" {
 
 		if (rio->socket > 0) {
 			while (rio->sendBufferQueue != 0) {
-				int sendBufferHead = rio->sendBufferTail - rio->sendBufferQueue;
+				int sendBufferHead;
+				if (rio->sendBufferTail >= rio->sendBufferQueue) {					
+					sendBufferHead = rio->sendBufferTail - rio->sendBufferQueue;
+				} else {
+					sendBufferHead = (rio->sendBufferTail + rio->sendBufferCount - rio->sendBufferQueue);
+				}
 				BOOL addressless = rio->sendBuffers[sendBufferHead].addressless;
 
 				if (!rio->functions.RIOSendEx(rio->requestQueue, &rio->sendBuffers[sendBufferHead].data, 1, NULL, (addressless == FALSE ? &rio->sendBuffers[sendBufferHead].address : NULL), NULL, NULL, 0, 0)) {
